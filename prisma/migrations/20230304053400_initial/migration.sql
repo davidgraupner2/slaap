@@ -1,5 +1,5 @@
 -- CreateTable
-CREATE TABLE "permission" (
+CREATE TABLE "Permission" (
     "id" SERIAL NOT NULL,
     "created_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -15,7 +15,7 @@ CREATE TABLE "permission" (
 );
 
 -- CreateTable
-CREATE TABLE "tenant" (
+CREATE TABLE "Tenant" (
     "id" SERIAL NOT NULL,
     "created_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -33,12 +33,11 @@ CREATE TABLE "tenant" (
 );
 
 -- CreateTable
-CREATE TABLE "user" (
+CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
     "created_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "deleted_at" TIMESTAMP(6),
-    "version" INTEGER NOT NULL,
     "created_by" INTEGER,
     "updated_by" INTEGER,
     "first_name" VARCHAR NOT NULL,
@@ -53,4 +52,4 @@ CREATE TABLE "user" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "UQ_e12875dfb3b1d92d7d7c5377e22" ON "user"("email");
+CREATE UNIQUE INDEX "UQ_e12875dfb3b1d92d7d7c5377e22" ON "User"("email");
