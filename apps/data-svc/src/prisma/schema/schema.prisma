@@ -1,0 +1,125 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Group {
+  id          Int          @id @default(autoincrement())
+  tenant      Tenant       @relation(fields: [tenant_id], references: [id])
+  tenant_id   Int
+  name        String
+  
+  // Common Model properties - all models must have these
+  is_active     Boolean   @default(false)
+  created_at    DateTime  @default(now()) @db.Timestamp(6)
+  updated_at    DateTime  @default(now()) @db.Timestamp(6)
+  deleted_at    DateTime? @db.Timestamp(6)
+  created_by    Int?
+  updated_by    Int?
+  deleted       DateTime?
+
+  /// The permissions that belong to this group
+  permissions Permission[]
+  
+  /// The users that belong to this group
+  users       User[]
+
+  /// The same group name cannot exist in the same tenant
+  @@unique([tenant_id, name])
+  @@map("groups")
+}
+
+/// The main permissions model, access to CRUD and execute operations on tables are managed by permissions
+model Permission {
+  id         Int       @id(map: "PK_3b8b97af9d9d8807e41e6f48362") @default(autoincrement())
+  tenant     Tenant    @relation("tenant_permission",fields: [tenant_id], references: [id], onUpdate: NoAction, onDelete: Cascade )
+  tenant_id  Int
+  table_name String    @db.VarChar
+  permission String    @db.VarChar
+    
+  // Common Model properties - all models must have these
+  is_active     Boolean   @default(false)
+  created_at    DateTime  @default(now()) @db.Timestamp(6)
+  updated_at    DateTime  @default(now()) @db.Timestamp(6)
+  deleted_at    DateTime? @db.Timestamp(6)
+  created_by    Int?
+  updated_by    Int?
+  deleted       DateTime?
+  
+  /// The groups that are linked to this permission
+  groups     Group[]
+
+  // The same permissions cannot exist on the same table, in the same tenant
+  @@unique([tenant_id, table_name, permission])
+
+  @@map("permissions")
+}
+
+/// The main tenantobject model, users belong to one or more tenants which control visibility and the permissions model
+model Tenant {
+  
+  // Some common model properties
+  id          Int       @id(map: "PK_da8c6efd67bb301e810e56ac139") @default(autoincrement())
+  name        String    @unique @db.VarChar
+  description String?   @db.VarChar
+  is_public   Boolean   @default(false)
+  owner       User?     @relation("owner", fields: [owned_by], references: [id])
+  owned_by    Int?
+
+  // Common Model properties - all models must have these
+  is_active     Boolean   @default(false)
+  created_at    DateTime  @default(now()) @db.Timestamp(6)
+  updated_at    DateTime  @default(now()) @db.Timestamp(6)
+  deleted_at    DateTime? @db.Timestamp(6)
+  created_by    Int?
+  updated_by    Int?
+  deleted       DateTime?
+
+  /// The groups that belong to this tenant
+  groups      Group[]
+  
+  /// The users that belong to this tenant
+  users       User[]
+
+  ///The permissions that are configured for this tenant
+  permissions Permission[] @relation("tenant_permission")
+
+  @@map("tenants")
+}
+
+/// The main user object model, all users of the system will have a user record
+model User {
+  // Common user properties
+  id                Int     @id(map: "PK_cace4a159ff9f2512dd42373760") @default(autoincrement())
+  first_name        String  @db.VarChar(255)
+  last_name         String  @db.VarChar(255)
+  user_name         String? @db.VarChar(320)
+  email             String  @unique(map: "UQ_e12875dfb3b1d92d7d7c5377e22") @db.VarChar(320)
+  password          String  @db.VarChar
+  is_email_verified Boolean @default(false)
+  is_msp            Boolean @default(false)
+
+  // Common Model properties - all models must have these
+  is_active     Boolean   @default(false)
+  created_at    DateTime  @default(now()) @db.Timestamp(6)
+  updated_at    DateTime  @default(now()) @db.Timestamp(6)
+  deleted_at    DateTime? @db.Timestamp(6)
+  created_by    Int?
+  updated_by    Int?
+  deleted       DateTime?
+
+  /// The tenants that are owned by this user record
+  owned_tenants Tenant[] @relation("owner")
+
+  /// The tenants that this user is a member of
+  tenants Tenant[]
+
+  /// The permission groups, this user is a member of
+  groups Group[]
+
+  @@map("users")
+}

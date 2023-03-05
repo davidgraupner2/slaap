@@ -7,6 +7,7 @@ const prisma = new PrismaClient();
  * Main function which kicks off the seeding of the database
  */
 async function main() {
+  // Create or update the admin user
   const admin = await prisma.user.upsert({
     where: { email: 'msp.admin@localhost' },
     update: {},
@@ -35,6 +36,26 @@ async function main() {
         ],
       },
     },
+  });
+
+  const public_tenant = await prisma.tenant.upsert({
+    where: { name: 'public' },
+    create: {
+      name: 'public',
+      description: 'Public Tenant',
+      is_public: true,
+    },
+    update: {},
+  });
+
+  const slp_tenant = await prisma.tenant.upsert({
+    where: { name: 'Streamline Partners' },
+    create: {
+      name: 'Streamline Partners',
+      description: 'Streamline Partners Tenant',
+      is_public: false,
+    },
+    update: {},
   });
 
   console.log({ admin });
