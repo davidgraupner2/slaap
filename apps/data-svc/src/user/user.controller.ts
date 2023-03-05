@@ -9,16 +9,15 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User as userModel } from '@prisma/client';
+import { MessagePattern } from '@nestjs/microservices';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Get(':id')
-  async getUserById(@Param('id') id: number): Promise<userModel> {
-    // return this.userService.user({ id: Number(id) });
-    console.log('******************', typeof id, id);
-    return this.userService.findById(id);
+  @MessagePattern({ cmd: 'getUserById' })
+  async getUserById(data: number): Promise<userModel> {
+    return this.userService.findById(data);
   }
 
   // @Get(':email')
