@@ -6,11 +6,11 @@ import { User, Prisma } from '@prisma/client';
 export class UserService {
   constructor(private prisma: PrismaService) {}
 
-  async userById(id: number): Promise<User | null> {
+  async findById(id: number): Promise<User | null> {
     console.log('Here');
     const user = await this.prisma.user.findUnique({
       where: {
-        id: parseInt(id),
+        id: id,
       },
       include: {
         owned_tenants: true,

@@ -17,64 +17,65 @@ export class UserController {
   @Get(':id')
   async getUserById(@Param('id') id: number): Promise<userModel> {
     // return this.userService.user({ id: Number(id) });
-    return this.userService.userById(id);
+    console.log('******************', typeof id, id);
+    return this.userService.findById(id);
   }
 
-  @Get(':email')
-  async getUserByEmail(@Param('email') email: string): Promise<userModel> {
-    console.log('Hereemail');
-    return this.userService.user({ email: String(email) });
-  }
+  // @Get(':email')
+  // async getUserByEmail(@Param('email') email: string): Promise<userModel> {
+  //   console.log('Hereemail');
+  //   return this.userService.user({ email: String(email) });
+  // }
 
-  @Post()
-  async signupUser(
-    @Body()
-    userData: {
-      first_name: string;
-      last_name: string;
-      email: string;
-      user_name?: string;
-      password: string;
-    },
-  ): Promise<userModel> {
-    if (!userData.user_name) {
-      userData.user_name = userData.email;
-    }
+  // @Post()
+  // async signupUser(
+  //   @Body()
+  //   userData: {
+  //     first_name: string;
+  //     last_name: string;
+  //     email: string;
+  //     user_name?: string;
+  //     password: string;
+  //   },
+  // ): Promise<userModel> {
+  //   if (!userData.user_name) {
+  //     userData.user_name = userData.email;
+  //   }
 
-    return this.userService.createUser(userData);
-  }
+  //   return this.userService.createUser(userData);
+  // }
 
-  @Get('filtered-users/:searchString')
-  async getFilteredUsers(
-    @Param('searchString') searchString: string,
-  ): Promise<userModel[]> {
-    return this.userService.users({
-      where: {
-        OR: [
-          {
-            email: { contains: searchString },
-          },
-          {
-            user_name: { contains: searchString },
-          },
-          {
-            first_name: { contains: searchString },
-          },
-          {
-            last_name: { contains: searchString },
-          },
-        ],
-      },
-    });
-  }
+  // @Get('filtered-users/:searchString')
+  // async getFilteredUsers(
+  //   @Param('searchString') searchString: string,
+  // ): Promise<userModel[]> {
+  //   return this.userService.users({
+  //     where: {
+  //       OR: [
+  //         {
+  //           email: { contains: searchString },
+  //         },
+  //         {
+  //           user_name: { contains: searchString },
+  //         },
+  //         {
+  //           first_name: { contains: searchString },
+  //         },
+  //         {
+  //           last_name: { contains: searchString },
+  //         },
+  //       ],
+  //     },
+  //   });
+  // }
 
-  @Delete('id')
-  async deleteUserById(@Param('id') id: string): Promise<userModel> {
-    return this.userService.deleteUser({ id: Number(id) });
-  }
+  // @Delete('id')
+  // async deleteUserById(@Param('id') id: string): Promise<userModel> {
+  //   return this.userService.deleteUser({ id: Number(id) });
+  // }
 
-  @Delete('email')
-  async deleteUserByEmail(@Param('email') email: string): Promise<userModel> {
-    return this.userService.deleteUser({ email: String(email) });
-  }
+  // @Delete('email')
+  // async deleteUserByEmail(@Param('email') email: string): Promise<userModel> {
+  //   return this.userService.deleteUser({ email: String(email) });
+  // }
 }

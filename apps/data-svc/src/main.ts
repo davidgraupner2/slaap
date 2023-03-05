@@ -3,6 +3,8 @@ import { DataSvcModule } from './data-svc.module';
 import { ConfigService } from '@nestjs/config';
 import 'winston-daily-rotate-file';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+import { Transport, MicroserviceOptions } from '@nestjs/microservices';
+import { NATS_CONFIG_SERVERS } from '@lib/common/config/constants';
 
 async function bootstrap() {
   const app = await NestFactory.create(DataSvcModule);
@@ -13,6 +15,15 @@ async function bootstrap() {
   // Replace the default NestJS Logger with Winston
   app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
 
-  await app.listen(3000);
+  // Connect up the Auth Microservice using configuration from the env file
+  app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.NATS,
+    options: {
+      servers: [configService.get(NATS_CONFIG_SERVERS)],
+    },
+  });
+
+  // Start the Auth Microservice
+  app.startAllMicroservices();
 }
 bootstrap();
