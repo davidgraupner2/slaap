@@ -20,6 +20,7 @@ async function bootstrap() {
     transport: Transport.NATS,
     options: {
       servers: [configService.get(NATS_CONFIG_SERVERS)],
+      authenticator: 
     },
   });
 
