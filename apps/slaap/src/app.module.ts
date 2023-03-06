@@ -7,6 +7,7 @@ import { MicroServiceClientModule } from './microserviceclient';
 import { UserController } from './user/user.controller';
 import { UserService } from './user/user.service';
 import { UserModule } from './user/user.module';
+import { SchemaModule } from './schema/schema.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { UserModule } from './user/user.module';
     CommonLoggingModule,
     MicroServiceClientModule,
     UserModule,
+    SchemaModule,
   ],
   controllers: [AppController, UserController],
   providers: [AppService, UserService],
