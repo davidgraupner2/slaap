@@ -19,7 +19,9 @@ export class UserService {
     });
 
     /**
-     * Loop though users found and add any computed properties
+     * Loop though users found
+     * - add any computed properties
+     * - remove any excluded fields
      */
     for (let i = 0; i < users.length; i++) {
       users[i] = this.enrichAndRemove(users[i]);

@@ -40,6 +40,26 @@
       "compilerOptions": {
         "tsConfigPath": "libs/common/tsconfig.lib.json"
       }
+    },
+    "schema-svc": {
+      "type": "application",
+      "root": "apps/schema-svc",
+      "entryFile": "main",
+      "sourceRoot": "apps/schema-svc/src",
+      "compilerOptions": {
+        "assets": ["config/**/*"],
+        "watchAssets": true,
+        "tsConfigPath": "apps/schema-svc/tsconfig.app.json"
+      }
+    },
+    "database": {
+      "type": "library",
+      "root": "libs/database",
+      "entryFile": "index",
+      "sourceRoot": "libs/database/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/database/tsconfig.lib.json"
+      }
     }
   }
 }

@@ -21,7 +21,10 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./apps/slaap/test/jest-e2e.json"
+    "test:e2e": "jest --config ./apps/slaap/test/jest-e2e.json",
+    "schema-svc:update:db:development": "cd apps/schema-svc/src/config && NODE_ENV=development npx knex migrate:latest && NODE_ENV=development npx knex seed:run",
+    "schema-svc:update:db:staging": "cd apps/schema-svc/src/config && NODE_ENV=staging npx knex migrate:latest && NODE_ENV=staging npx knex seed:run",
+    "schema-svc:update:db:production": "cd apps/schema-svc/src/config && NODE_ENV=production npx knex migrate:latest && NODE_ENV=production npx knex seed:run"
   },
   "dependencies": {
     "@nestjs/common": "^9.3.9",
@@ -32,8 +35,11 @@
     "@prisma/client": "^4.11.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
+    "knex": "^2.4.2",
     "nats": "^2.12.1",
+    "nest-knexjs": "^0.0.14",
     "nest-winston": "^1.9.0",
+    "pg": "^8.9.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.0",
     "winston": "^3.8.2",
@@ -84,7 +90,9 @@
       "<rootDir>/libs/"
     ],
     "moduleNameMapper": {
-      "^@lib/common(|/.*)$": "<rootDir>/libs/common/src/$1"
+      "^@lib/common(|/.*)$": "<rootDir>/libs/common/src/$1",
+      "^@lib/schema(|/.*)$": "<rootDir>/libs/schema/src/$1",
+      "^@lib/database(|/.*)$": "<rootDir>/libs/database/src/$1"
     }
   }
 }
