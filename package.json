@@ -36,6 +36,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
     "knex": "^2.4.2",
+    "knex-schema-inspector": "^3.0.1",
     "nats": "^2.12.1",
     "nest-knexjs": "^0.0.14",
     "nest-winston": "^1.9.0",

@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { KnexRepository } from '@lib/database/abstract/knex.repository.abstract';
+import { KnexRepository } from '@lib/database/abstract/knex.repository';
 import { InjectModel } from 'nest-knexjs';
 import { Knex } from 'knex';
-import { DataSchema } from '@lib/common/entities/schema/data-schema';
+import { DataSchema } from '@lib/common/entities';
 import schemaInspector from 'knex-schema-inspector';
-import { SCHEMA_SUB_TYPES, SCHEMA_TYPES } from '@lib/database/constants';
+import { SCHEMA_SUB_TYPES, SCHEMA_TYPES } from '@lib/database/constants/schema';
 
 @Injectable()
-export class SchemaService {
+export class SchemaService extends KnexRepository<DataSchema> {
   constructor(@InjectModel() public readonly knex: Knex) {
     super(knex, 'data_schema');
   }
@@ -15,7 +15,7 @@ export class SchemaService {
   // Create a new instance of the schema inspector
   inspector = schemaInspector(this.knex);
 
-  async getSchema(
+  async getTables(
     type: SCHEMA_TYPES | void = undefined,
     sub_type: SCHEMA_SUB_TYPES | void = undefined,
   ) {
