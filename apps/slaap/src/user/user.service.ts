@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
-import { excludeKeys, computeFullName } from '@lib/common/utils';
+// import { excludeKeys, computeFullName } from '@lib/common/utils';
 
 @Injectable()
 export class UserService {
@@ -22,8 +22,9 @@ export class UserService {
     );
 
     // Add computed properties
-    user = computeFullName(user);
+    // user = computeFullName(user);
+    return user;
 
-    return user ? excludeKeys(user, ['password']) : [];
+    // return user; ? excludeKeys(user, ['password']) : [];
   }
 }

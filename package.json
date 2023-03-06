@@ -2,8 +2,8 @@
   "name": "slaap",
   "version": "0.0.1",
   "prisma": {
-    "seed": "ts-node ./apps/data-svc/src/prisma/schema/seed.ts",
-    "schema": "./apps/data-svc/src/prisma/schema/schema.prisma"
+    "seed": "ts-node ./apps/data-svc/src/database/schema/seed.ts",
+    "schema": "./apps/data-svc/src/database/schema/schema.prisma"
   },
   "description": "",
   "author": "",

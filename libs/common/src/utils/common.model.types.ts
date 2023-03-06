@@ -6,5 +6,5 @@ export type FirstLastName = {
 
 // Extend the T generic with the fullName attribute
 export type WithFullName<T> = T & {
-  fullName: string;
+  full_name: string;
 };

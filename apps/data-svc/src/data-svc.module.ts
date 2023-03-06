@@ -3,15 +3,13 @@ import { DataSvcController } from './data-svc.controller';
 import { DataSvcService } from './data-svc.service';
 import { EnvConfigModule } from '@lib/common/config';
 import { CommonLoggingModule } from '@lib/common/logging';
-import { PrismaModule } from './prisma/client/prisma.module';
 import { UserController } from './user/user.controller';
 import { UserModule } from './user/user.module';
 import { UserService } from './user/user.service';
-import { PrismaService } from '../src/prisma/client/prisma.service';
 
 @Module({
-  imports: [EnvConfigModule, CommonLoggingModule, PrismaModule, UserModule],
+  imports: [EnvConfigModule, CommonLoggingModule, UserModule],
   controllers: [DataSvcController, UserController],
-  providers: [DataSvcService, UserService, PrismaService],
+  providers: [DataSvcService, UserService],
 })
 export class DataSvcModule {}

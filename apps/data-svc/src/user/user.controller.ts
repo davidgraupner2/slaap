@@ -16,7 +16,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @MessagePattern({ cmd: 'getUserById' })
-  async getUserById(data: number): Promise<userModel> {
+  async getUserById(data: number) {
     return this.userService.findById(data);
   }
 
