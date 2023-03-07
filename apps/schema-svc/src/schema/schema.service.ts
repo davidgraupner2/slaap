@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { DataSchema } from '@lib/common/entities';
 import schemaInspector from 'knex-schema-inspector';
 import { Knex } from 'knex';
-import { SCHEMA_SUB_TYPES, SCHEMA_TYPES } from '@lib/database/constants/schema';
+import { SchemaRequestDTO } from '@lib/common/dto';
 
 @Injectable()
 export class SchemaService extends KnexRepository<DataSchema> {
@@ -15,55 +15,59 @@ export class SchemaService extends KnexRepository<DataSchema> {
   // Create a new instance of the schema inspector
   inspector = schemaInspector(this.knex);
 
-  async getSchema(
-    type: SCHEMA_TYPES | void = undefined,
-    sub_type: SCHEMA_SUB_TYPES | void = undefined,
-  ) {
+  async getSchema(tableName?: string, type?: string, subType?: string) {
+    console.log('3', tableName, 'type ', type, 'sub ', subType);
     let schemas: object[] = [];
 
-    // check whether a certain type of schema was selected.
+    // Start off the query on just the table
+    if (!tableName && !type && !subType) {
+      console.log('heh');
+      schemas = await this.queryBuilder.select();
+    }
+
+    // Filter the query by table name if provided
+    if (tableName !== undefined) {
+      schemas = await this.queryBuilder.where({
+        name: tableName,
+      });
+    }
+
+    // Filter the query by Schema type if provided
     if (type !== undefined) {
-      // It was - filter the query by type
       schemas = await this.queryBuilder.where({
         type: type,
       });
     }
 
-    // check whether a certain sub-type of schema was selected.
-    if (sub_type !== undefined) {
-      // It was - filter the query by sub-type
+    // Filter the query by Schema sub_type if provided
+    if (subType !== undefined) {
       schemas = await this.queryBuilder.where({
-        subType: sub_type,
+        subType: subType,
       });
     }
 
-    if (type === undefined && sub_type === undefined) {
-      // No types - subtypes were selected
-      schemas = await this.queryBuilder.select();
-    }
-
     // Loop though the schema's found and populate the relationships
-    schemas.forEach(async (schema, index, array) => {
-      // Populate the owner
-      // schema.owner = await this.getOneToOneRelationshipData(
-      //   'public',
-      //   'user',
-      //   'id',
-      //   schema['owner'],
-      // );
+    // schemas.forEach(async (schema, index, array) => {
+    // Populate the owner
+    // schema.owner = await this.getOneToOneRelationshipData(
+    //   'public',
+    //   'user',
+    //   'id',
+    //   schema['owner'],
+    // );
 
-      // schema = this.AddOneOnOneRelationships(
-      //   schema,
-      //   await this.getOneToOneRelationshipData(
-      //     'public',
-      //     'user',
-      //     'id',
-      //     schema['owner'],
-      //   ),
-      // );
+    // schema = this.AddOneOnOneRelationships(
+    //   schema,
+    //   await this.getOneToOneRelationshipData(
+    //     'public',
+    //     'user',
+    //     'id',
+    //     schema['owner'],
+    //   ),
+    // );
 
-      console.log(schema);
-    });
+    //   console.log(schema);
+    // });
 
     // this.table[0] = this.AddOneOnOneRelationships(
     //   this.table[0],

@@ -40,3 +40,9 @@ export enum SCHEMA_SUB_TYPES {
   user_table = 'user-table',
   user_view = 'user-view',
 }
+
+// export type SCHEMA_REQUEST = {
+//   table_name?: string;
+//   type?: SCHEMA_TYPES;
+//   sub_type?: SCHEMA_SUB_TYPES;
+// };

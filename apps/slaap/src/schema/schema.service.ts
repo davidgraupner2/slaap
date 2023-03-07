@@ -1,3 +1,4 @@
+import { SchemaRequestDTO } from '@lib/common/dto';
 import { Injectable, Inject } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
@@ -10,7 +11,10 @@ export class SchemaService {
     private readonly micro_svc_client: ClientProxy,
   ) {}
 
-  async getTables() {
-    return this.micro_svc_client.send({ cmd: 'schema' }, {});
+  async getSchema(tableName?: string, type?: string, subType?: string) {
+    return this.micro_svc_client.send(
+      { cmd: 'schema' },
+      { table_name: tableName, type: type, sub_type: subType },
+    );
   }
 }
