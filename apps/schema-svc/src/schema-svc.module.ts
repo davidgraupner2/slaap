@@ -5,10 +5,12 @@ import { EnvConfigModule } from '@lib/common/config';
 import { CommonLoggingModule } from '@lib/common/logging';
 import { DatabaseModule } from '@lib/database';
 import { SchemaModule } from './schema/schema.module';
+import { SchemaController } from './schema/schema.controller';
+import { SchemaService } from './schema/schema.service';
 
 @Module({
   imports: [EnvConfigModule, CommonLoggingModule, DatabaseModule, SchemaModule],
-  controllers: [SchemaSvcController],
-  providers: [SchemaSvcService],
+  controllers: [SchemaSvcController, SchemaController],
+  providers: [SchemaSvcService, SchemaService],
 })
 export class SchemaSvcModule {}
