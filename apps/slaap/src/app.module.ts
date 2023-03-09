@@ -8,6 +8,7 @@ import { UserController } from './user/user.controller';
 import { UserService } from './user/user.service';
 import { UserModule } from './user/user.module';
 import { SchemaModule } from './schema/schema.module';
+import { TableModule } from './table/table.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { SchemaModule } from './schema/schema.module';
     MicroServiceClientModule,
     UserModule,
     SchemaModule,
+    TableModule,
   ],
   controllers: [AppController, UserController],
   providers: [AppService, UserService],

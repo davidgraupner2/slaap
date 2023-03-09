@@ -9,16 +9,10 @@ import { ConfigService } from '@nestjs/config';
 import {
   API_GATEWAY_LISTENING_IP,
   API_GATEWAY_LISTENING_PORT,
-  DB_CLIENT,
-  DB_HOST,
-  DB_NAME,
-  DB_PASSWORD,
-  DB_PORT,
-  DB_USER,
-  SESSION_SECRET,
 } from '@lib/common/config/constants';
 import { useContainer } from 'class-validator';
 import { GlobalHttpExceptionFilter } from '@lib/common/error-handling';
+import { GenericResponseInterceptor } from '@lib/common/interceptors';
 
 async function bootstrap() {
   // Load the certificates files for enabling https
@@ -80,6 +74,9 @@ async function bootstrap() {
       enableDebugMessages: true,
     }),
   );
+
+  // Add the global interceptor for ensuring all responses have the same format
+  app.useGlobalInterceptors(new GenericResponseInterceptor());
 
   // Get access to the ConfigService - to read the necessary configuration from the env file
   const configService = app.get<ConfigService>(ConfigService);

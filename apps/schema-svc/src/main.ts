@@ -5,6 +5,7 @@ import 'winston-daily-rotate-file';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { Transport, MicroserviceOptions } from '@nestjs/microservices';
 import { NATS_CONFIG_SERVERS } from '@lib/common/config/constants';
+import { GlobalRPCExceptionFilter } from '@lib/common/error-handling';
 
 async function bootstrap() {
   const app = await NestFactory.create(SchemaSvcModule);

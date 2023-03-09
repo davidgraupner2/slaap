@@ -1,19 +1,36 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Query,
+  Get,
+  Param,
+  Catch,
+} from '@nestjs/common';
 import { SchemaService } from './schema.service';
-import { MessagePattern } from '@nestjs/microservices';
-import { SchemaRequestDTO } from '@lib/common/dto';
 
 @Controller('schema')
 export class SchemaController {
   constructor(private readonly schemaService: SchemaService) {}
 
-  @Post()
-  getSchema(@Body() schemaRequest: SchemaRequestDTO) {
-    console.log('ouch', typeof schemaRequest);
-    return this.schemaService.getSchema(
-      schemaRequest.table_name,
-      schemaRequest.type,
-      schemaRequest.sub_type,
-    );
+  ////////////////////////////////////////
+  // Section: Operations on single tables
+  ////////////////////////////////////////
+
+  @Get('table/:tableName')
+  getTable(@Param() params) {
+    try {
+      return this.schemaService.getTableSchema(params.tableName);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  ////////////////////////////////////
+  // Section: Operations on all tables
+  ////////////////////////////////////
+  @Get('tables')
+  getTables() {
+    return this.schemaService.getTablesSchema();
   }
 }
