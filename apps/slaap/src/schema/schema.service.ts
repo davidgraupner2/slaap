@@ -21,14 +21,19 @@ export class SchemaService {
   ////////////////////////////////////////
   // Section: Operations on single tables
   ////////////////////////////////////////
+
+  /**
+   * Attempts to get the details for a specific tablle from the schema
+   * @param tableName
+   * @returns The table schema details or an error
+   */
   async getTableSchema(tableName: string) {
     return await firstValueFrom(
       this.micro_svc_client
         .send({ cmd: 'schema/table' }, { table_name: tableName })
         .pipe(
           catchError((error) => {
-            console.log(error);
-            throw new HttpException('Hello Error: ' + error.message, 404);
+            throw new HttpException(error.message, error.status);
           }),
         ),
       { defaultValue: [] },

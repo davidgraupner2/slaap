@@ -1,6 +1,8 @@
 export class GenericResponseDTO {
   statusCode: number;
-  statusError: string;
-  message: string;
-  data: any;
+  statusMessage: string;
+  timeStamp: string;
+  path: string;
+  method: string;
+  data: any[];
 }

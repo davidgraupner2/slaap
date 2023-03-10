@@ -88,7 +88,9 @@ export class SchemaService extends KnexRepository<DataSchema> {
       return schema;
     } else {
       console.log('Hello');
-      throw new RpcException('Not Found');
+      throw new RpcException(
+        new NotFoundException(`Table '${tableName}' was not found!`),
+      );
     }
 
     return schema;
