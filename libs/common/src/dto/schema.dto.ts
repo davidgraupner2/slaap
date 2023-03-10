@@ -1,4 +1,4 @@
-import { IsEnum, IsOptional, IsString, IS_STRING } from 'class-validator';
+import { IsEnum, IsOptional, IsString, IsInt } from 'class-validator';
 import { SCHEMA_TYPES, SCHEMA_SUB_TYPES } from '@lib/database/constants/schema';
 
 /**
@@ -7,6 +7,11 @@ import { SCHEMA_TYPES, SCHEMA_SUB_TYPES } from '@lib/database/constants/schema';
 export class SchemaTableRequest {
   @IsString()
   table_name: string;
+}
+
+export class SchemaTableByIdRequest {
+  @IsInt()
+  id: number;
 }
 
 export class SchemaRequestDTO2 {

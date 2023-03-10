@@ -1,3 +1,6 @@
+/**
+ * Generic response sent with all API Responses
+ */
 export class GenericResponseDTO {
   statusCode: number;
   statusMessage: string;

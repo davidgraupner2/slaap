@@ -71,6 +71,9 @@ async function bootstrap() {
 
       // Enable debug messages for now
       enableDebugMessages: true,
+
+      // Set Tranformation true
+      transform: true,
     }),
   );
 

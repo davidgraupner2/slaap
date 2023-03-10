@@ -23,7 +23,7 @@ export class SchemaService {
   ////////////////////////////////////////
 
   /**
-   * Attempts to get the details for a specific tablle from the schema
+   * Attempts to get the details for a specific table from the schema using the table name
    * @param tableName
    * @returns The table schema details or an error
    */
@@ -36,6 +36,22 @@ export class SchemaService {
             throw new HttpException(error.message, error.status);
           }),
         ),
+      { defaultValue: [] },
+    );
+  }
+
+  /**
+   * Attempts to get the details for a specific table from the schema using the table id
+   * @param id
+   * @returns The table schema details or an error
+   */
+  async getTableSchemaById(id: number) {
+    return await firstValueFrom(
+      this.micro_svc_client.send({ cmd: 'schema/table/id' }, { id: id }).pipe(
+        catchError((error) => {
+          throw new HttpException(error.message, error.status);
+        }),
+      ),
       { defaultValue: [] },
     );
   }

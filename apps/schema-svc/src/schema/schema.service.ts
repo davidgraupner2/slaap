@@ -100,6 +100,22 @@ export class SchemaService extends KnexRepository<DataSchema> {
     // return await db;
   }
 
+  async getTableSchemaById(id: number) {
+    // Start the SQL Statement with the table id
+    const schema = await this.queryBuilder.where('id', id);
+
+    if (schema.length > 0) {
+      return schema;
+    } else {
+      console.log('Hello');
+      throw new RpcException(
+        new NotFoundException(`Table with '${id}' was not found`),
+      );
+    }
+
+    return schema;
+  }
+
   ////////////////////////////////////
   // Section: Operations on all tables
   ////////////////////////////////////

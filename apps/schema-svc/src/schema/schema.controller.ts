@@ -6,7 +6,7 @@ import {
   NatsContext,
   Payload,
 } from '@nestjs/microservices';
-import { SchemaTableRequest } from '@lib/common/dto';
+import { SchemaTableByIdRequest, SchemaTableRequest } from '@lib/common/dto';
 import { GlobalRPCExceptionFilter } from '@lib/common/error-handling';
 
 /**
@@ -26,6 +26,14 @@ export class SchemaController {
     @Ctx() context: NatsContext,
   ) {
     return this.schemaService.getTableSchema(payload.table_name);
+  }
+
+  @MessagePattern({ cmd: 'schema/table/id' })
+  getTableSchemaById(
+    @Payload() payload: SchemaTableByIdRequest,
+    @Ctx() context: NatsContext,
+  ) {
+    return this.schemaService.getTableSchemaById(payload.id);
   }
 
   ////////////////////////////////////

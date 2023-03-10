@@ -1,3 +1,4 @@
+import { SchemaTableByIdRequest } from '@lib/common/dto';
 import {
   Controller,
   Post,
@@ -17,13 +18,14 @@ export class SchemaController {
   // Section: Operations on single tables
   ////////////////////////////////////////
 
-  @Get('table/:tableName')
+  @Get('tableByName/:tableName')
   getTable(@Param() params) {
-    try {
-      return this.schemaService.getTableSchema(params.tableName);
-    } catch (error) {
-      console.log(error);
-    }
+    return this.schemaService.getTableSchema(params.tableName);
+  }
+
+  @Get('table/:id')
+  getTableById(@Param('id') IdDTO: SchemaTableByIdRequest) {
+    return this.schemaService.getTableSchemaById(IdDTO.id);
   }
 
   ////////////////////////////////////
