@@ -5,15 +5,67 @@ import { DataSchema } from '@lib/common/entities';
 import schemaInspector from 'knex-schema-inspector';
 import { Knex } from 'knex';
 import { RpcException } from '@nestjs/microservices';
+import { ConfigService } from '@nestjs/config';
+import { SYSTEM_SCHEMAS } from '@lib/common';
 
 @Injectable()
 export class SchemaService extends KnexRepository<DataSchema> {
-  constructor(@InjectModel() public readonly knex: Knex) {
+  constructor(
+    @InjectModel() public readonly knex: Knex,
+    private readonly configService: ConfigService,
+  ) {
     super(knex, 'data_schema');
   }
 
   // Create a new instance of the schema inspector
   inspector = schemaInspector(this.knex);
+
+  ///////////////////////////////////////////////////////////
+  // Start:
+  //        - Set of methods concerned with current state
+  ///////////////////////////////////////////////////////////
+
+  /**
+   * getCurrentSchemas
+   * @returns List of schemas that exist in the database (Minus system schemas)
+   */
+  async getCurrentSchemas() {
+    // For storing list of schemas
+    // const current_schemas = [];
+
+    // const sql = `SELECT schema_name FROM information_schema.schemata where schema_name not in (${this.configService.get(
+    //   SYSTEM_SCHEMAS,
+    // )})`;
+    // console.error(sql);
+
+    // Get the list of all schemas directly from the database
+    const schemas = await this.knex.raw(
+      `SELECT schema_name FROM information_schema.schemata where schema_name not in (${this.configService.get(
+        SYSTEM_SCHEMAS,
+      )})`,
+    );
+    // console.log(schemas);
+
+    // // Read the list of system schemas from the config file
+    // const system_schemas = String(this.configService.get(SYSTEM_SCHEMAS)).split(
+    //   ',',
+    // );
+
+    // // Add the schema to the array to return
+    // // - but first ensure only user schemas as added
+    // if (schemas) {
+    //   for (let index = schemas['rows'].length - 1; index >= 0; index--) {
+    //     if (
+    //       system_schemas.indexOf(schemas['rows'][index]['schema_name']) === -1
+    //     ) {
+    //       current_schemas.push(schemas['rows'][index]['schema_name']);
+    //     }
+    //   }
+
+    //   return current_schemas;
+    // }
+    return schemas;
+  }
 
   ////////////////////////////////////////
   // Section: Operations on single tables
@@ -122,6 +174,15 @@ export class SchemaService extends KnexRepository<DataSchema> {
   async getTablesSchema() {
     // Start the SQL Statement with all the records
     const schemas = await this.queryBuilder.select();
+
+    this.inspector.withSchema('public');
+    // console.log(await this.inspector.tables());
+    console.log(await this.getCurrentSchemas());
+    // console.log(await this.inspector.tableInfo('data_schema'));
+    // console.log(await this.inspector.hasTable('data_schema'));
+    // console.log(await this.inspector.columns());
+    // console.log(await this.inspector.columnInfo('data_schema_columns'));
+    // console.log(await this.inspector.foreignKeys('data_schema_columns'));
 
     // Filter the query by table name if provided
     // if (tableName !== undefined) {

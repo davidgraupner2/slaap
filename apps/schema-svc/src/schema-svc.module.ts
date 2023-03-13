@@ -7,9 +7,16 @@ import { DatabaseModule } from '@lib/database';
 import { SchemaModule } from './schema/schema.module';
 import { SchemaController } from './schema/schema.controller';
 import { SchemaService } from './schema/schema.service';
+import { TableModule } from './table/table.module';
 
 @Module({
-  imports: [EnvConfigModule, CommonLoggingModule, DatabaseModule, SchemaModule],
+  imports: [
+    EnvConfigModule,
+    CommonLoggingModule,
+    DatabaseModule,
+    SchemaModule,
+    TableModule,
+  ],
   controllers: [SchemaSvcController, SchemaController],
   providers: [SchemaSvcService, SchemaService],
 })
