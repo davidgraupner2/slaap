@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { GenericResponseDTO } from '../dto';
+import { RepositoryTableDoesNotExist } from './custom.exceptions';
 
 /**
  * A Global HTTP Exceptions filter
@@ -22,6 +23,21 @@ export class GlobalHttpExceptionFilter implements ExceptionFilter {
 
     // Create a generic response object
     const generic_response = new GenericResponseDTO();
+
+    // Handle custom exceptions a little differently
+    if (exception instanceof RepositoryTableDoesNotExist) {
+      // This exception occurs if a table does not exist
+      // - We don't want to give the user of the API the tablename (security risk) - so we push the tablename to the log
+      // and respond with a more generic message
+      generic_response.statusMessage =
+        'Cannot execute query at this here time!';
+      // cause = 'The required data repository does not exist';
+      console.log('############# Table does not exist!!!!');
+
+      // Get the table name
+      const tableName = exception['options']['description'];
+      TODO: 'Write the exception to the log, indicating the table name that does not exist';
+    }
 
     // Populate the generic response object
     generic_response.statusCode = exception.getStatus();

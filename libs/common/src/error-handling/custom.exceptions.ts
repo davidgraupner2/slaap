@@ -7,8 +7,8 @@ import { HttpException, HttpStatus } from '@nestjs/common';
 export class RepositoryTableDoesNotExist extends HttpException {
   constructor(tableName: string) {
     super(
-      'Cannot execute query at this here time!',
-      HttpStatus.INTERNAL_SERVER_ERROR,
+      'Table not found - Cannot execute query at this time!',
+      HttpStatus.NOT_FOUND,
       {
         cause: new Error(),
         description: tableName,

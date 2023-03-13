@@ -18,6 +18,6 @@ export class TableController {
     @Ctx() context: NatsContext,
   ) {
     console.log(payload);
-    return await this.tableService.all('public', payload.table_name);
+    return await this.tableService.all('peanut', payload.table_name);
   }
 }

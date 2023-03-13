@@ -60,10 +60,10 @@ export class SchemaService {
   // Section: Operations on all tables
   ////////////////////////////////////
   async getTablesSchema() {
-    // return this.micro_svc_client.send({ cmd: 'schema/tables' }, {});
-    return this.micro_svc_client.send(
-      { cmd: 'table/all' },
-      { table_name: 'knex_migrations' },
-    );
+    return this.micro_svc_client.send({ cmd: 'schema/tables' }, {});
+    // return this.micro_svc_client.send(
+    //   { cmd: 'table/all' },
+    //   { table_name: 'knex_migrations' },
+    // );
   }
 }

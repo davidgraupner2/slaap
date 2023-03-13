@@ -18,7 +18,7 @@ export class SimpleQueryDto {
   @Transform(({ value }) => toNumber(value, { default: 0 }))
   @IsNumber()
   @IsOptional()
-  public page: number = 1;
+  public page = 1;
 
   @Transform(({ value }) => toBoolean(value))
   @IsBoolean()
