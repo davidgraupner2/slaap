@@ -22,6 +22,9 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./apps/slaap/test/jest-e2e.json",
+    "slaap:update:db:development": "cd apps/slaap/src/config && NODE_ENV=development npx knex migrate:latest && NODE_ENV=development npx knex seed:run",
+    "slaap:update:db:staging": "cd apps/slaap/src/config && NODE_ENV=staging npx knex migrate:latest && NODE_ENV=staging npx knex seed:run",
+    "slaap:update:db:production": "cd apps/slaap/src/config && NODE_ENV=production npx knex migrate:latest && NODE_ENV=production npx knex seed:run",
     "schema-svc:update:db:development": "cd apps/schema-svc/src/config && NODE_ENV=development npx knex migrate:latest && NODE_ENV=development npx knex seed:run",
     "schema-svc:update:db:staging": "cd apps/schema-svc/src/config && NODE_ENV=staging npx knex migrate:latest && NODE_ENV=staging npx knex seed:run",
     "schema-svc:update:db:production": "cd apps/schema-svc/src/config && NODE_ENV=production npx knex migrate:latest && NODE_ENV=production npx knex seed:run"
