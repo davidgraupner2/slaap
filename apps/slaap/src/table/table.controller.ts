@@ -1,3 +1,4 @@
+import { SelectQueryDTO } from '@lib/database/dto/tableSelectQueryDto';
 import {
   Controller,
   Get,
@@ -6,8 +7,11 @@ import {
   Patch,
   Param,
   Delete,
+  ParseArrayPipe,
+  Query,
 } from '@nestjs/common';
 import { TableService } from './table.service';
+import { FieldsValidationPipe } from './validation.pipes';
 
 @Controller('table')
 export class TableController {
@@ -19,8 +23,13 @@ export class TableController {
   // }
 
   @Get(':table_name')
-  findAll(@Param() params) {
-    return this.tableService.findAll(params.table_name);
+  findAll(
+    @Param('table_name') table_name: string,
+    @Query('fields', new FieldsValidationPipe()) fields: string,
+  ) {
+    console.log(table_name, fields);
+
+    // return this.tableService.findAll(params.table_name);
   }
 
   // @Get(':id')

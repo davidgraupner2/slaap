@@ -1,0 +1,82 @@
+import { PassportStrategy } from '@nestjs/passport';
+import { ExtractJwt, Strategy } from 'passport-jwt';
+import {
+  Injectable,
+  ForbiddenException,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { Request } from 'express';
+// import { UserService } from '../../users/users.service';
+// import { TokenService } from '../../tokens/tokens.service';
+// import { User } from '@lib/entities';
+import * as authConstants from '@lib/auth/constants';
+// import { TenantService } from '../../tenants/tenant.service';
+
+@Injectable()
+export class JwtRefreshStrategy extends PassportStrategy(
+  Strategy,
+  'jwt-refresh',
+) {
+  constructor(
+    configService: ConfigService,
+    private userService: UserService,
+    private tokenService: TokenService,
+    private tenantService: TenantService,
+  ) {
+    super({
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      passReqToCallback: true,
+      secretOrKey: configService.get('JWT_REFRESH_SECRET'),
+    });
+  }
+
+  // This strategy first verifies the JWT Token and its signature and decodes the token
+  // Then it invokes the validate function below passing in the decoded token
+  async validate(req: Request, payload: any): Promise<User> | undefined {
+    /*
+    Check whether the refresh token is found in the database
+    */
+
+    const refresh_token = await this.tokenService.getRefreshToken(
+      payload.sub,
+      payload.jti,
+    );
+
+    // If the token is not revoked - continue
+    if (refresh_token && refresh_token.isActive === true) {
+      // Passport.js will build a user object using the data returned from this function
+      // and attach that to the request object
+
+      // Get the user record associated with the current user
+      const user = await this.userService.getCurrentUser(payload.sub);
+
+      // Get the tenants associated with the user
+      const tenants = await this.tenantService.tenantsForUser(payload.sub);
+
+      //Handle Email not verified
+      if (user && !user.isActive && !user.isEmailVerified) {
+        throw new UnauthorizedException(authConstants.ACCESS_DENIED, {
+          cause: new Error(),
+          description: authConstants.EMAIL_ADDRESS_NOT_VERIFIED,
+        });
+      }
+
+      // Handle User not active
+      if (user && !user.isActive) {
+        throw new UnauthorizedException(authConstants.ACCESS_DENIED, {
+          cause: new Error(),
+          description: authConstants.NOT_ACTIVE,
+        });
+      }
+
+      if (user && tenants.length > 0) {
+        // The active user exists and has 1 or more valid tenants
+        return user;
+      }
+    }
+
+    // Refresh token was not validated
+    return undefined;
+  }
+}

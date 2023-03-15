@@ -16,7 +16,9 @@
       "entryFile": "main",
       "sourceRoot": "apps/slaap/src",
       "compilerOptions": {
-        "assets": ["config/**/*"],
+        "assets": [
+          "config/**/*"
+        ],
         "watchAssets": true,
         "tsConfigPath": "apps/slaap/tsconfig.app.json"
       }
@@ -27,7 +29,9 @@
       "entryFile": "main",
       "sourceRoot": "apps/data-svc/src",
       "compilerOptions": {
-        "assets": ["config/**/*"],
+        "assets": [
+          "config/**/*"
+        ],
         "watchAssets": true,
         "tsConfigPath": "apps/data-svc/tsconfig.app.json"
       }
@@ -47,7 +51,9 @@
       "entryFile": "main",
       "sourceRoot": "apps/schema-svc/src",
       "compilerOptions": {
-        "assets": ["config/**/*"],
+        "assets": [
+          "config/**/*"
+        ],
         "watchAssets": true,
         "tsConfigPath": "apps/schema-svc/tsconfig.app.json"
       }
@@ -59,6 +65,15 @@
       "sourceRoot": "libs/database/src",
       "compilerOptions": {
         "tsConfigPath": "libs/database/tsconfig.lib.json"
+      }
+    },
+    "auth": {
+      "type": "library",
+      "root": "libs/auth",
+      "entryFile": "index",
+      "sourceRoot": "libs/auth/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/auth/tsconfig.lib.json"
       }
     }
   }

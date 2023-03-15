@@ -1,0 +1,71 @@
+import { ExtractJwt, Strategy } from 'passport-jwt';
+import { PassportStrategy } from '@nestjs/passport';
+import {
+  ForbiddenException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { ConfigService } from '../../config/config.service';
+import { UserService } from '../../users/users.service';
+import * as authConstants from '../../auth/constants';
+import { TenantService } from '../../tenants/tenant.service';
+import { TokenService } from '../../tokens/tokens.service';
+import { User } from '@lib/entities';
+
+@Injectable()
+export class JwtStrategy extends PassportStrategy(Strategy) {
+  constructor(
+    private configService: ConfigService,
+    private userService: UserService,
+    private tenantService: TenantService,
+    private tokenService: TokenService,
+  ) {
+    super({
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      ignoreExpiration: false,
+      secretOrKey: configService.get('JWT_SECRET'),
+    });
+  }
+
+  /* 
+  Passport.js first validates that the token supplied is valid/ decodes the token and then
+  calls validate below - passing in the payload that was supplied in the token
+  - Validate must return either 'undefined' (the default) or an object to add to the request object
+  - If 'undefined' is returned / access is denied and a 'Unauthorized' exception is thrown
+  */
+  async validate(payload: any | undefined): Promise<User> | undefined {
+    // Get access to the current token by the JTI (Access Token Id)
+    // This is stored against the user record
+    const token = await this.tokenService.getToken(payload.sub, payload.jti);
+
+    // If the token is not revoked - continue
+    if (token && token.isActive === true) {
+      // Get the user record associated with the current user
+      const user = await this.userService.getCurrentUser(payload.sub);
+
+      // Get the tenants associated with the user
+      const tenants = await this.tenantService.tenantsForUser(payload.sub);
+
+      //Handle Email not verified
+      if (user && !user.isActive && !user.isEmailVerified) {
+        throw new UnauthorizedException(authConstants.ACCESS_DENIED, {
+          cause: new Error(),
+          description: authConstants.EMAIL_ADDRESS_NOT_VERIFIED,
+        });
+      }
+
+      // Handle User not active
+      if (user && !user.isActive) {
+        throw new UnauthorizedException(authConstants.ACCESS_DENIED, {
+          cause: new Error(),
+          description: authConstants.NOT_ACTIVE,
+        });
+      }
+
+      if (user && tenants.length > 0) {
+        // The active user exists and has 1 or more valid tenants
+        return user;
+      }
+    }
+  }
+}
