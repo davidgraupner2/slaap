@@ -1,4 +1,4 @@
-import { SelectQueryDTO } from '@lib/database/dto/tableSelectQueryDto';
+import { TableAPIQueryDTO } from '@lib/database/dto';
 import {
   Controller,
   Get,
@@ -9,6 +9,7 @@ import {
   Delete,
   ParseArrayPipe,
   Query,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { TableService } from './table.service';
 import { FieldsValidationPipe } from './validation.pipes';
@@ -25,10 +26,15 @@ export class TableController {
   @Get(':table_name')
   findAll(
     @Param('table_name') table_name: string,
-    @Query('fields', new FieldsValidationPipe()) fields: string,
+    // @Query(FieldsValidationPipe) query: { table_name; fields },
+    @Query() tableAPIQueryDTO: TableAPIQueryDTO,
+    // @Query('fields', new FieldsValidationPipe()) fields: string,
+    // @Query('page', ParseIntPipe) page?: number,
   ) {
-    console.log(table_name, fields);
-
+    console.log(JSON.stringify(tableAPIQueryDTO));
+    // console.log(tableAPIQueryDTO.fields[0]);
+    // console.log(typeof tableAPIQueryDTO.page);
+    // console.log(table_name, tableAPIQueryDTO.fields, tableAPIQueryDTO.page);
     // return this.tableService.findAll(params.table_name);
   }
 

@@ -60,7 +60,7 @@ async function bootstrap() {
 
   // Use a global exceptions filter
   // - All Exceptions will use this for formatting etc
-  app.useGlobalFilters(new GlobalHttpExceptionFilter());
+  // app.useGlobalFilters(new GlobalHttpExceptionFilter());
 
   /* Add global pipe validation
   - Data Transfer Objects will be automatically validated by the system*/

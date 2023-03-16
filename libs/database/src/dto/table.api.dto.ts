@@ -1,0 +1,44 @@
+import { Transform, Type } from 'class-transformer';
+import {
+  ArrayNotEmpty,
+  IsArray,
+  IsBoolean,
+  IsDate,
+  IsIn,
+  IsNumber,
+  IsNumberString,
+  IsOptional,
+  IsString,
+  MinLength,
+  Validate,
+  ValidateNested,
+  ValidationArguments,
+  ValidatorConstraint,
+  ValidatorConstraintInterface,
+} from 'class-validator';
+import { ValidateSortOrderField } from './validators';
+
+export class TableAPIQueryDTO {
+  @IsArray()
+  @IsOptional()
+  @Transform(({ value }) => value.split(','))
+  fields = ['*'];
+
+  @IsOptional()
+  @IsNumber()
+  @Type(() => Number)
+  page = 1;
+
+  @IsOptional()
+  @IsNumber()
+  @Type(() => Number)
+  results_per_page = 20;
+
+  @IsArray()
+  @IsOptional()
+  @Transform(({ value }) => value.split(','))
+  @Validate(ValidateSortOrderField, [':ASC', ':DESC'], {
+    each: true,
+  })
+  sort_fields = [];
+}

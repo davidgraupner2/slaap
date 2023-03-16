@@ -4,9 +4,12 @@ import { PipeTransform, Injectable, ArgumentMetadata } from '@nestjs/common';
 
 @Injectable()
 export class FieldsValidationPipe implements PipeTransform {
-  transform(value: any, metadata: ArgumentMetadata) {
-    console.log(value);
-    console.log(metadata);
+  transform(
+    value: { tableName: string; fields: string },
+    metadata: ArgumentMetadata,
+  ) {
+    console.log(value, 'Value: ###');
+    console.log(metadata, 'Meta: ###');
     return value;
   }
 }
