@@ -16,9 +16,13 @@ import {
   ValidatorConstraint,
   ValidatorConstraintInterface,
 } from 'class-validator';
-import { ValidateSortOrderField } from './validators';
+import { ValidateSortOrderField, ValidateTableName } from './validators';
 
 export class TableAPIQueryDTO {
+  @IsString()
+  @Validate(ValidateTableName)
+  table_name: string;
+
   @IsArray()
   @IsOptional()
   @Transform(({ value }) => value.split(','))
@@ -37,8 +41,6 @@ export class TableAPIQueryDTO {
   @IsArray()
   @IsOptional()
   @Transform(({ value }) => value.split(','))
-  @Validate(ValidateSortOrderField, [':ASC', ':DESC'], {
-    each: true,
-  })
+  @Validate(ValidateSortOrderField, [':ASC', ':DESC'])
   sort_fields = [];
 }

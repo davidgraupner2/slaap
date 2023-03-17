@@ -11,12 +11,14 @@ import { SchemaModule } from './schema/schema.module';
 import { TableModule } from './table/table.module';
 import { AuthController } from './auth/auth.controller';
 import { AuthModule } from './auth/auth.module';
+import { DatabaseModule } from '@lib/database';
 
 @Module({
   imports: [
     EnvConfigModule,
     CommonLoggingModule,
     MicroServiceClientModule,
+    DatabaseModule,
     UserModule,
     SchemaModule,
     TableModule,
