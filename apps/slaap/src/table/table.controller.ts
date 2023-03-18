@@ -25,13 +25,13 @@ export class TableController {
 
   @Get(':table_name')
   findAll(
-    @Param('table_name') table_name: string,
+    // @Param('table_name') table_name: string,
     // @Query(FieldsValidationPipe) query: { table_name; fields },
-    @Query() tableAPIQueryDTO: TableAPIQueryDTO,
-    // @Query('fields', new FieldsValidationPipe()) fields: string,
+    // @Query() tableAPIQueryDTO: TableAPIQueryDTO,
+    @Query(FieldsValidationPipe) tableAPIQueryDTO: TableAPIQueryDTO,
     // @Query('page', ParseIntPipe) page?: number,
   ) {
-    console.log(JSON.stringify(tableAPIQueryDTO));
+    // console.log(JSON.stringify(fields));
     // console.log(tableAPIQueryDTO.fields[0]);
     // console.log(typeof tableAPIQueryDTO.page);
     // console.log(table_name, tableAPIQueryDTO.fields, tableAPIQueryDTO.page);

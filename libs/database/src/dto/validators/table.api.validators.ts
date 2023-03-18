@@ -6,18 +6,21 @@ import {
 import { InjectModel } from 'nest-knexjs';
 import { Knex } from 'knex';
 import schemaInspector from 'knex-schema-inspector';
+import { Injectable } from '@nestjs/common';
 
 @ValidatorConstraint({ name: 'ValidateSortOrderField', async: false })
+@Injectable()
 export class ValidateTableName implements ValidatorConstraintInterface {
   constructor(@InjectModel() public readonly knex: Knex) {}
-  async validate(
+  validate(
     value: any,
     validationArguments?: ValidationArguments,
   ): boolean | Promise<boolean> {
     // Create a new instance of the schema inspector
+    console.log(this.knex, 'knex');
     // const inspector = schemaInspector(this.knex);
 
-    // console.log(await this.knex.withSchema('public').);
+    // console.log(this.knex.schema.hasTable(value));
 
     console.log(value, 'Table Name');
     return true;

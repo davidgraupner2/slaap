@@ -20,12 +20,12 @@ import { ValidateSortOrderField, ValidateTableName } from './validators';
 
 export class TableAPIQueryDTO {
   @IsString()
-  @Validate(ValidateTableName)
+  // @Validate(ValidateTableName)
   table_name: string;
 
-  @IsArray()
+  // @IsArray()
   @IsOptional()
-  @Transform(({ value }) => value.split(','))
+  @Transform(({ value }) => String(value).split(','))
   fields = ['*'];
 
   @IsOptional()
@@ -40,7 +40,7 @@ export class TableAPIQueryDTO {
 
   @IsArray()
   @IsOptional()
-  @Transform(({ value }) => value.split(','))
-  @Validate(ValidateSortOrderField, [':ASC', ':DESC'])
+  @Transform(({ value }) => String(value).split(','))
+  // @Validate(ValidateSortOrderField, [':ASC', ':DESC'])
   sort_fields = [];
 }
