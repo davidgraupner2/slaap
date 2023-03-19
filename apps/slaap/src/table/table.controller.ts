@@ -12,7 +12,7 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import { TableService } from './table.service';
-import { FieldsValidationPipe } from './validation.pipes';
+import { TableAPIQueryDTOValidationPipe } from './validation.pipes';
 
 @Controller('table')
 export class TableController {
@@ -23,12 +23,12 @@ export class TableController {
   //   return this.tableService.create(createTableDto);
   // }
 
-  @Get(':table_name')
+  @Get()
   findAll(
-    // @Param('table_name') table_name: string,
+    // @Param('table_name', TableExistsValidationPipe) table_name: string,
     // @Query(FieldsValidationPipe) query: { table_name; fields },
     // @Query() tableAPIQueryDTO: TableAPIQueryDTO,
-    @Query(FieldsValidationPipe) tableAPIQueryDTO: TableAPIQueryDTO,
+    @Query(TableAPIQueryDTOValidationPipe) tableAPIQueryDTO: TableAPIQueryDTO,
     // @Query('page', ParseIntPipe) page?: number,
   ) {
     // console.log(JSON.stringify(fields));

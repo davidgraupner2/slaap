@@ -20,13 +20,12 @@ import { ValidateSortOrderField, ValidateTableName } from './validators';
 
 export class TableAPIQueryDTO {
   @IsString()
-  // @Validate(ValidateTableName)
   table_name: string;
 
   // @IsArray()
   @IsOptional()
   @Transform(({ value }) => String(value).split(','))
-  fields = ['*'];
+  columns = ['*'];
 
   @IsOptional()
   @IsNumber()

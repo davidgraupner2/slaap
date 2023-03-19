@@ -1,1 +1,1 @@
-export * from './fields.validation.pipe';
+export * from './tableapiquery.validation.pipe';
