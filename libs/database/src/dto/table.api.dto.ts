@@ -41,5 +41,5 @@ export class TableAPIQueryDTO {
   @IsOptional()
   @Transform(({ value }) => String(value).split(','))
   // @Validate(ValidateSortOrderField, [':ASC', ':DESC'])
-  sort_fields = [];
+  sort_columns = [];
 }

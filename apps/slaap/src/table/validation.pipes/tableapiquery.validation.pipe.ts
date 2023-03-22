@@ -83,15 +83,15 @@ export class TableAPIQueryDTOValidationPipe implements PipeTransform<any> {
     }
 
     // Check sort orders are correctly requested
-    // const sortOrderErrors = checkSortOrderApplied(
-    //   ['ASC', 'DESC'],
-    //   object.sort_order,
-    // );
-    // console.log(sortOrderErrors, 'errors');
+    const sortOrderErrors = checkSortOrderApplied(
+      [':ASC', ':DESC'],
+      object.sort_columns,
+    );
+    console.log(sortOrderErrors, 'errors');
 
-    // if (sortOrderErrors.length > 0) {
-    //   throw new BadRequestException(this.column_errors);
-    // }
+    if (sortOrderErrors.length > 0) {
+      throw new BadRequestException(sortOrderErrors);
+    }
 
     console.log(this.column_errors);
 
@@ -108,34 +108,48 @@ export class TableAPIQueryDTOValidationPipe implements PipeTransform<any> {
 }
 
 function checkSortOrderApplied(
-  SortOrderNeeded: string[],
+  RequiredSortOrderValues: string[],
   columnsToCheck: string[],
 ) {
+  console.log(RequiredSortOrderValues);
+  console.log(columnsToCheck);
   const sortOrderErrors = [];
 
   // Loop through each column passed in
   for (let index = 0; index < columnsToCheck.length; index++) {
     // Extract the proposed sort order from the end of the column passed in
-    const sort_order = String(columnsToCheck[index]).indexOf(':');
+    const requested_sort_order = String(columnsToCheck[index]).indexOf(':');
 
-    if (sort_order == -1) {
-      // There is no sort order proposed
+    if (requested_sort_order == -1) {
+      // There was no sort order proposed
       // - Add this sort field to the validation failures
       sortOrderErrors.push(
-        `${columnsToCheck[index]} has no sort order requested. Add '${SortOrderNeeded}' suffix`,
+        `${columnsToCheck[index]} has no sort order requested. Add '${String(
+          RequiredSortOrderValues,
+        ).replace(',', "' or '")}' suffix`,
       );
     } else {
       // There is sort order proposed
       // Compare this to the allowed sort order
-      const isMatched = SortOrderNeeded.includes(
-        String(columnsToCheck[index]).substring(sort_order),
+      console.log(
+        'Checking: ',
+        String(columnsToCheck[index]).substring(requested_sort_order),
+        requested_sort_order,
+      );
+
+      const isMatched = RequiredSortOrderValues.includes(
+        String(columnsToCheck[index]).substring(requested_sort_order),
       );
 
       if (!isMatched) {
         // Sort order is not matches to whats allowed
         // Add the sort field to the validation failures
         sortOrderErrors.push(
-          `${columnsToCheck[index]} has an  invalid sort order requested. Add '${SortOrderNeeded}' suffix`,
+          `${
+            columnsToCheck[index]
+          } has an  invalid sort order requested. Add '${String(
+            RequiredSortOrderValues,
+          ).replace(',', "' or '")}' suffix`,
         );
       }
     }
